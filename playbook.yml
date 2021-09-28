@@ -1,0 +1,82 @@
+---
+- name: dev machine init
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: upgrade system
+      become: yes
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+    - name: install necessary packages
+      become: yes
+      apt:
+        pkg:
+          - zsh
+          - git
+
+    - name: install or update starship
+      become: yes
+      shell: sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -f
+
+    - name: download antigen
+      get_url:
+        url: https://git.io/antigen
+        dest: ~/antigen.zsh
+
+    - name: get newest fzf version (only for this user)
+      git:
+        repo: https://github.com/junegunn/fzf.git
+        dest: ~/.fzf
+        depth: 1
+
+    - name: install fzf
+      shell: ~/.fzf/install --completion --no-update-rc --key-bindings
+
+    - name: copy config files
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+      with_items:
+        - { src: files/.zshrc, dest: ~/.zshrc }
+        - { src: files/.config/starship.toml, dest: ~/.config/starship.toml }
+
+    - name: change shell to zsh
+      user:
+        name: "{{ ansible_user_id }}"
+        shell: /bin/zsh
+
+    - name: add golang apt repo
+      apt_repository:
+        repo: ppa:longsleep/golang-backports
+
+    - name: add nodejs v16 repo
+      shell: curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+
+    - name: add hashicorp gpg key
+      become: yes
+      apt_key:
+        url: https://apt.releases.hashicorp.com/gpg
+
+    - name: add hashicorp repo
+      become: yes
+      apt_repository:
+        repo: "deb https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
+
+    - name: install golang, node, packer, terraform
+      become: yes
+      apt:
+        update_cache: yes
+        pkg:
+          - golang-1.17
+          - nodejs
+          - terraform
+          - packer
+
+    - name: set go binary to version 1.17
+      become: yes
+      file:
+        src: /usr/lib/go-1.17/bin/go
+        dest: /usr/bin/go
+        state: link
