@@ -40,7 +40,10 @@
         dest: "{{ item.dest }}"
       with_items:
         - { src: files/home/.zshrc, dest: ~/.zshrc }
-        - { src: files/home/.config/starship.toml, dest: ~/.config/starship.toml }
+        - {
+            src: files/home/.config/starship.toml,
+            dest: ~/.config/starship.toml
+          }
 
     - name: copy vimrc.local
       become: yes
@@ -88,3 +91,13 @@
         src: /usr/lib/go-1.17/bin/go
         dest: /usr/bin/go
         state: link
+
+    - name: download gohugo deb package
+      get_url:
+        url: https://github.com/gohugoio/hugo/releases/download/v0.88.1/hugo_extended_0.88.1_Linux-64bit.deb
+        dest: /tmp/hugo.deb
+
+    - name: install gohugo binary
+      become: yes
+      apt:
+        deb: /tmp/hugo.deb
