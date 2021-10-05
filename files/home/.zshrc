@@ -4,10 +4,13 @@ SAVEHIST=1000
 bindkey -e
 bindkey '^H' backward-kill-word
 bindkey '5~' kill-word
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
 zstyle :compinstall filename '~/.zshrc'
 
 autoload -Uz compinit
 compinit
+zstyle ':completion:*' menu select
 
 unsetopt BEEP
 
