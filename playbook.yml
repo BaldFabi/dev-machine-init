@@ -40,6 +40,7 @@
         dest: "{{ item.dest }}"
       with_items:
         - { src: files/home/.zshrc, dest: ~/.zshrc }
+        - { src: files/home/.gitconfig, dest: ~/.gitconfig }
         - {
             src: files/home/.config/starship.toml,
             dest: ~/.config/starship.toml
