@@ -55,6 +55,7 @@
         - { src: files/etc/vim/vimrc.local, dest: /etc/vim/vimrc.local }
 
     - name: change shell to zsh
+      become: yes
       user:
         name: "{{ ansible_user_id }}"
         shell: /bin/zsh
