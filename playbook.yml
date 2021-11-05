@@ -64,8 +64,8 @@
       apt_repository:
         repo: ppa:longsleep/golang-backports
 
-    - name: add nodejs v16 repo
-      shell: curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+    - name: add nodejs v17 repo
+      shell: curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -
 
     - name: add hashicorp gpg key
       become: yes
