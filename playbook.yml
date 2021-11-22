@@ -34,6 +34,11 @@
     - name: install fzf
       shell: ~/.fzf/install --completion --no-update-rc --key-bindings
 
+    - name: create .config directory
+      file:
+        path: ~/.config
+        state: directory
+
     - name: copy config files
       copy:
         src: "{{ item.src }}"
