@@ -66,10 +66,12 @@
         shell: /bin/zsh
 
     - name: add golang apt repo
+      become: yes
       apt_repository:
         repo: ppa:longsleep/golang-backports
 
     - name: add nodejs v17 repo
+      become: yes
       shell: curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -
 
     - name: add hashicorp gpg key
