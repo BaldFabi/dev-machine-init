@@ -15,6 +15,7 @@
         pkg:
           - zsh
           - git
+          - sshpass
 
     - name: install or update starship
       become: yes
