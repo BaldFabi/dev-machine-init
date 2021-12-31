@@ -1,3 +1,9 @@
+format="$hostname$directory$git_branch$git_status$golang$python$nodejs$terraform$cmd_duration$fill$sudo$memory_usage$time$line_break$character"
+
+[fill]
+symbol = " "
+style = ""
+
 [hostname]
 ssh_only = false
 format =  "[ $hostname ](bg:#dbff00 black)"
@@ -37,5 +43,14 @@ format = "[ $symbol$version ](bg:white black)"
 [terraform]
 format = "[ $symbol$workspace ](bg:white black)"
 
+[sudo]
+disabled = false
+allow_windows = true
+format = "[ $symbol](bg:white black)"
+
 [cmd_duration]
 format = "[ ⏰ $duration ](bg:blue white)"
+
+[time]
+disabled = false
+format = "$fill[ 🕓 $time ](bg:white black)"
