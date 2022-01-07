@@ -135,3 +135,18 @@
       become: yes
       apt:
         name: azure-cli
+
+    - name: add kubernetes gpg key
+      become: yes
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+    - name: add kubernetes repo
+      become: yes
+      apt_repository:
+        repo: "deb [arch=amd64] https://apt.kubernetes.io/ kubernetes-xenial main"
+
+    - name: install kubectl
+      become: yes
+      apt:
+        name: kubectl
