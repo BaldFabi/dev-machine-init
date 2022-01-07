@@ -108,7 +108,7 @@
 
     - name: download gohugo deb package
       get_url:
-        url: https://github.com/gohugoio/hugo/releases/download/v0.90.1/hugo_extended_0.90.1_Linux-64bit.deb
+        url: https://github.com/gohugoio/hugo/releases/download/v0.91.2/hugo_extended_0.91.2_Linux-64bit.deb
         dest: /tmp/hugo.deb
 
     - name: install gohugo binary
