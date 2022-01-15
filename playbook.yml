@@ -20,6 +20,7 @@
           - curl
           - apt-transport-https
           - gnupg
+          - jq
 
     - name: install or update starship
       become: true
@@ -133,6 +134,10 @@
 
     - name: install k9s
       shell: curl -sS https://webinstall.dev/k9s | bash
+
+    - name: install havener
+      become: true
+      shell: curl -sL https://raw.githubusercontent.com/homeport/havener/main/scripts/download-latest.sh | bash
 
     - name: add helm repo key
       become: true
