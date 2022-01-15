@@ -4,13 +4,13 @@
   connection: local
   tasks:
     - name: upgrade system
-      become: yes
+      become: true
       apt:
         update_cache: yes
         upgrade: dist
 
     - name: install necessary packages
-      become: yes
+      become: true
       apt:
         pkg:
           - zsh
@@ -22,7 +22,7 @@
           - gnupg
 
     - name: install or update starship
-      become: yes
+      become: true
       shell: sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -f
 
     - name: download antigen
@@ -57,7 +57,7 @@
           }
 
     - name: copy vimrc.local
-      become: yes
+      become: true
       copy:
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
@@ -65,42 +65,32 @@
         - { src: files/etc/vim/vimrc.local, dest: /etc/vim/vimrc.local }
 
     - name: change shell to zsh
-      become: yes
+      become: true
       user:
         name: "{{ ansible_user_id }}"
         shell: /bin/zsh
 
     - name: add golang apt repo
-      become: yes
+      become: true
       apt_repository:
         repo: ppa:longsleep/golang-backports
 
     - name: add nodejs v17 repo
-      become: yes
+      become: true
       shell: curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -
 
-    - name: add hashicorp gpg key
-      become: yes
+    - name: add hashicorp repo key
+      become: true
       apt_key:
         url: https://apt.releases.hashicorp.com/gpg
 
     - name: add hashicorp repo
-      become: yes
+      become: true
       apt_repository:
         repo: "deb https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
 
-    - name: install golang, node, packer, terraform
-      become: yes
-      apt:
-        update_cache: yes
-        pkg:
-          - golang-1.17
-          - nodejs
-          - terraform
-          - packer
-
     - name: set go binary to version 1.17
-      become: yes
+      become: true
       file:
         src: /usr/lib/go-1.17/bin/go
         dest: /usr/bin/go
@@ -112,7 +102,7 @@
         dest: /tmp/hugo.deb
 
     - name: install gohugo binary
-      become: yes
+      become: true
       apt:
         deb: /tmp/hugo.deb
 
@@ -121,32 +111,48 @@
         path: /tmp/hugo.deb
         state: absent
 
-    - name: add microsoft gpg key
-      become: yes
+    - name: add microsoft repo key
+      become: true
       apt_key:
         url: https://packages.microsoft.com/keys/microsoft.asc
 
     - name: add microsoft repo
-      become: yes
+      become: true
       apt_repository:
         repo: "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ ansible_distribution_release }} main"
 
-    - name: install azure cli
-      become: yes
-      apt:
-        name: azure-cli
-
-    - name: add kubernetes gpg key
-      become: yes
+    - name: add kubernetes repo key
+      become: true
       apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
 
     - name: add kubernetes repo
-      become: yes
+      become: true
       apt_repository:
         repo: "deb [arch=amd64] https://apt.kubernetes.io/ kubernetes-xenial main"
 
-    - name: install kubectl
-      become: yes
+    - name: install k9s
+      shell: curl -sS https://webinstall.dev/k9s | bash
+
+    - name: add helm repo key
+      become: true
+      apt_key:
+        url: https://baltocdn.com/helm/signing.asc
+
+    - name: add helm repo
+      become: true
+      apt_repository:
+        repo: "deb https://baltocdn.com/helm/stable/debian/ all main"
+
+    - name: install helm, kubectl, azure-cli, golang, nodejs, terraform, packer
+      become: true
       apt:
-        name: kubectl
+        update_cache: yes
+        pkg:
+          - helm
+          - kubectl
+          - azure-cli
+          - golang-1.17
+          - nodejs
+          - terraform
+          - packer

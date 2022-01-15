@@ -25,3 +25,5 @@ antigen apply
 
 alias ls='ls --color=auto'
 alias ll='ls -lah'
+
+PATH="/home/fabian/.local/bin:$PATH"
