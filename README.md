@@ -9,6 +9,8 @@ This Ansible playbook is used to initially setup a dev machine. It's currently u
 
 ## Usage
 
+> Be sure to execute the playbook under **your** user and **not** root
+
 ```bash
 ansible-playbook -K playbook.yml
 ```
