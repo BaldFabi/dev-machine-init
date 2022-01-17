@@ -36,7 +36,7 @@ This Ansible playbook is used to initially setup a dev machine. It's currently u
 
 ## Prerequisite
 
-- Ansible (`python3 -m pip install ansible`)
+- Ansible (`apt install -y python3-pip && python3 -m pip install ansible`)
 - `sudo`
 
 ## Usage
@@ -47,4 +47,4 @@ This Ansible playbook is used to initially setup a dev machine. It's currently u
 ansible-playbook -K playbook.yml
 ```
 
-`-K` will forces you to provide your password (`sudo`) to run some tasks
+`-K` will force you to provide your password (`sudo`) to run some tasks
