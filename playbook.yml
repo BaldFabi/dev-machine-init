@@ -2,6 +2,10 @@
 - name: dev machine init
   hosts: localhost
   connection: local
+  vars:
+    node_version: 17
+    go_version: 1.17
+    gohugo_version: 0.91.2
   tasks:
     - name: upgrade system
       become: true
@@ -76,9 +80,9 @@
       apt_repository:
         repo: ppa:longsleep/golang-backports
 
-    - name: add nodejs v17 repo
+    - name: "add nodejs v{{ node_version }} repo"
       become: true
-      shell: curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -
+      shell: "curl -fsSL https://deb.nodesource.com/setup_{{ node_version }}.x | sudo -E bash -"
 
     - name: add hashicorp repo key
       become: true
@@ -90,19 +94,19 @@
       apt_repository:
         repo: "deb https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
 
-    - name: set go binary to version 1.17
+    - name: "set go binary to version {{ go_version }}"
       become: true
       file:
-        src: /usr/lib/go-1.17/bin/go
+        src: /usr/lib/go-{{ go_version }}/bin/go
         dest: /usr/bin/go
         state: link
 
-    - name: download gohugo deb package
+    - name: "download gohugo {{ gohugo_version }} deb package"
       get_url:
-        url: https://github.com/gohugoio/hugo/releases/download/v0.91.2/hugo_extended_0.91.2_Linux-64bit.deb
+        url: "https://github.com/gohugoio/hugo/releases/download/v{{ gohugo_version }}/hugo_extended_{{ gohugo_version }}_Linux-64bit.deb"
         dest: /tmp/hugo.deb
 
-    - name: install gohugo binary
+    - name: "install gohugo {{ gohugo_version }} binary"
       become: true
       apt:
         deb: /tmp/hugo.deb
