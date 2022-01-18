@@ -181,3 +181,8 @@
           - nodejs
           - terraform
           - packer
+
+    - name: autoremove unused packages
+      become: true
+      apt:
+        autoremove: true
