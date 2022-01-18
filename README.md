@@ -27,9 +27,10 @@ This Ansible playbook is used to initially setup a dev machine. It's currently u
   - packer
   - starship
   - [gohugo](https://gohugo.io)
+  - [glow](https://github.com/charmbracelet/glow)
 - Configurations
   - Change shell to `zsh`
-  - [Starship](https://starship.rs)
+  - Enable [Starship](https://starship.rs)
   - [fzf](https://github.com/junegunn/fzf)
   - `git` config
   - `vim`rc config
