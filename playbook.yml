@@ -6,6 +6,7 @@
     node_version: 17
     go_version: 1.17
     gohugo_version: 0.91.2
+    glow_version: 1.4.1
   tasks:
     - name: upgrade system
       become: true
@@ -114,6 +115,21 @@
     - name: remove gohugo install package
       file:
         path: /tmp/hugo.deb
+        state: absent
+
+    - name: "download glow {{ glow_version }} deb package"
+      get_url:
+        url: "https://github.com/charmbracelet/glow/releases/download/v{{ glow_version }}/glow_{{ glow_version }}_linux_amd64.deb"
+        dest: /tmp/glow.deb
+
+    - name: "install glow {{ glow_version }} binary"
+      become: true
+      apt:
+        deb: /tmp/glow.deb
+
+    - name: remove glow install package
+      file:
+        path: /tmp/glow.deb
         state: absent
 
     - name: add microsoft repo key
