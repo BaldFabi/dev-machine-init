@@ -1,6 +1,6 @@
 # Dev Machine Init
 
-This Ansible playbook is used to initially setup a dev machine. It's currently used within WSL2 (Ubuntu 20.04) but should also work on a regular machine/vm and probably on all Debain based distributions.
+This Ansible playbook is used to initially setup Ubuntu running as wsl.
 
 ## What will be configured
 
@@ -49,3 +49,4 @@ ansible-playbook -K playbook.yml
 ```
 
 `-K` will force you to provide your password (`sudo`) to run some tasks
+
