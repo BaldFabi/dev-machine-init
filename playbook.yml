@@ -4,7 +4,7 @@
   connection: local
   vars:
     node_version: 17
-    go_version: 1.17
+    go_version: 1.18
     gohugo_version: 0.91.2
     glow_version: 1.4.1
   tasks:
@@ -95,13 +95,6 @@
       apt_repository:
         repo: "deb https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
 
-    - name: "set go binary to version {{ go_version }}"
-      become: true
-      file:
-        src: /usr/lib/go-{{ go_version }}/bin/go
-        dest: /usr/bin/go
-        state: link
-
     - name: "download gohugo {{ gohugo_version }} deb package"
       get_url:
         url: "https://github.com/gohugoio/hugo/releases/download/v{{ gohugo_version }}/hugo_extended_{{ gohugo_version }}_Linux-64bit.deb"
@@ -177,10 +170,17 @@
           - helm
           - kubectl
           - azure-cli
-          - golang-1.17
+          - "golang-{{ go_version }}"
           - nodejs
           - terraform
           - packer
+
+    - name: "set go binary to version {{ go_version }}"
+      become: true
+      file:
+        src: /usr/lib/go-{{ go_version }}/bin/go
+        dest: /usr/bin/go
+        state: link
 
     - name: autoremove unused packages
       become: true
