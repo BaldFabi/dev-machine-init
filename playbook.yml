@@ -5,16 +5,17 @@
   vars:
     node_version: 17
     go_version: 1.18
-    gohugo_version: 0.91.2
+    gohugo_version: 0.95.0
     glow_version: 1.4.1
+    terraform_docs_version: 0.16.0
   tasks:
-    - name: upgrade system
+    - name: Upgrade system
       become: true
       apt:
         update_cache: yes
         upgrade: dist
 
-    - name: install necessary packages
+    - name: Install necessary packages
       become: true
       apt:
         pkg:
@@ -27,30 +28,30 @@
           - gnupg
           - jq
 
-    - name: install or update starship
+    - name: Install or update starship
       become: true
       shell: sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -f
 
-    - name: download antigen
+    - name: Download antigen
       get_url:
         url: https://git.io/antigen
         dest: ~/antigen.zsh
 
-    - name: get newest fzf version
+    - name: Get newest fzf version
       git:
         repo: https://github.com/junegunn/fzf.git
         dest: ~/.fzf
         depth: "1"
 
-    - name: install fzf
+    - name: Install fzf
       shell: ~/.fzf/install --completion --no-update-rc --key-bindings
 
-    - name: create .config directory
+    - name: Create .config directory
       file:
         path: ~/.config
         state: directory
 
-    - name: copy config files
+    - name: Copy config files
       copy:
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
@@ -62,7 +63,7 @@
             dest: ~/.config/starship.toml
           }
 
-    - name: copy vimrc.local
+    - name: Copy vimrc.local
       become: true
       copy:
         src: "{{ item.src }}"
@@ -70,99 +71,99 @@
       with_items:
         - { src: files/etc/vim/vimrc.local, dest: /etc/vim/vimrc.local }
 
-    - name: change shell to zsh
+    - name: Change shell to zsh
       become: true
       user:
         name: "{{ ansible_user_id }}"
         shell: /bin/zsh
 
-    - name: add golang apt repo
+    - name: Add golang apt repo
       become: true
       apt_repository:
         repo: ppa:longsleep/golang-backports
 
-    - name: "add nodejs v{{ node_version }} repo"
+    - name: "Add nodejs v{{ node_version }} repo"
       become: true
       shell: "curl -fsSL https://deb.nodesource.com/setup_{{ node_version }}.x | sudo -E bash -"
 
-    - name: add hashicorp repo key
+    - name: Add hashicorp repo key
       become: true
       apt_key:
         url: https://apt.releases.hashicorp.com/gpg
 
-    - name: add hashicorp repo
+    - name: Add hashicorp repo
       become: true
       apt_repository:
         repo: "deb https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
 
-    - name: "download gohugo {{ gohugo_version }} deb package"
+    - name: "Download gohugo {{ gohugo_version }} deb package"
       get_url:
         url: "https://github.com/gohugoio/hugo/releases/download/v{{ gohugo_version }}/hugo_extended_{{ gohugo_version }}_Linux-64bit.deb"
         dest: /tmp/hugo.deb
 
-    - name: "install gohugo {{ gohugo_version }} binary"
+    - name: "Install gohugo {{ gohugo_version }} binary"
       become: true
       apt:
         deb: /tmp/hugo.deb
 
-    - name: remove gohugo install package
+    - name: Remove gohugo install package
       file:
         path: /tmp/hugo.deb
         state: absent
 
-    - name: "download glow {{ glow_version }} deb package"
+    - name: "Download glow {{ glow_version }} deb package"
       get_url:
         url: "https://github.com/charmbracelet/glow/releases/download/v{{ glow_version }}/glow_{{ glow_version }}_linux_amd64.deb"
         dest: /tmp/glow.deb
 
-    - name: "install glow {{ glow_version }} binary"
+    - name: "Install glow {{ glow_version }} binary"
       become: true
       apt:
         deb: /tmp/glow.deb
 
-    - name: remove glow install package
+    - name: Remove glow install package
       file:
         path: /tmp/glow.deb
         state: absent
 
-    - name: add microsoft repo key
+    - name: Add microsoft repo key
       become: true
       apt_key:
         url: https://packages.microsoft.com/keys/microsoft.asc
 
-    - name: add microsoft repo
+    - name: Add microsoft repo
       become: true
       apt_repository:
         repo: "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ ansible_distribution_release }} main"
 
-    - name: add kubernetes repo key
+    - name: Add kubernetes repo key
       become: true
       apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
 
-    - name: add kubernetes repo
+    - name: Add kubernetes repo
       become: true
       apt_repository:
         repo: "deb [arch=amd64] https://apt.kubernetes.io/ kubernetes-xenial main"
 
-    - name: install k9s
+    - name: Install k9s
       shell: curl -sS https://webinstall.dev/k9s | bash
 
-    - name: install havener
+    - name: Install havener
       become: true
       shell: curl -sL https://raw.githubusercontent.com/homeport/havener/main/scripts/download-latest.sh | bash
 
-    - name: add helm repo key
+    - name: Add helm repo key
       become: true
       apt_key:
         url: https://baltocdn.com/helm/signing.asc
 
-    - name: add helm repo
+    - name: Add helm repo
       become: true
       apt_repository:
         repo: "deb https://baltocdn.com/helm/stable/debian/ all main"
 
-    - name: install helm, kubectl, azure-cli, golang, nodejs, terraform, packer
+    - name: Install helm, kubectl, azure-cli, golang, nodejs, terraform, packer
       become: true
       apt:
         update_cache: yes
@@ -175,14 +176,34 @@
           - terraform
           - packer
 
-    - name: "set go binary to version {{ go_version }}"
+    - name: "Set go binary to version {{ go_version }}"
       become: true
       file:
         src: /usr/lib/go-{{ go_version }}/bin/go
         dest: /usr/bin/go
         state: link
 
-    - name: autoremove unused packages
+    - name: Autoremove unused packages
       become: true
       apt:
         autoremove: true
+
+    - name: "Download terraform-docs {{ terraform_docs_version }} binary"
+      get_url:
+        url: "https://github.com/terraform-docs/terraform-docs/releases/download/v{{ terraform_docs_version }}/terraform-docs-v{{ terraform_docs_version }}-linux-amd64.tar.gz"
+        dest: /tmp/terraform-docs.tar.gz
+
+    - name: "Unarchive terraform-docs {{ terraform_docs_version }}"
+      unarchive:
+        src: /tmp/terraform-docs.tar.gz
+        dest: /tmp
+
+    - name: "move terraform-docs {{ terraform_docs_version }} to final destination"
+      copy:
+        src: /tmp/terraform-docs
+        dest: /home/fabian/.local/bin
+        remote_src: true
+        mode: "755"
+
+    - name: Remove terraform-docs leftovers
+      shell: rm -f /tmp/terraform-docs*

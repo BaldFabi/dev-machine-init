@@ -21,9 +21,10 @@ This Ansible playbook is used to initially setup Ubuntu running as wsl.
   - [k9s](https://github.com/derailed/k9s)
   - [havener](https://github.com/homeport/havener)
   - azure-cli
-  - golang-1.17
+  - golang-1.18
   - nodejs (v17)
   - terraform
+  - terraform-docs
   - packer
   - starship
   - [gohugo](https://gohugo.io)
@@ -49,4 +50,3 @@ ansible-playbook -K playbook.yml
 ```
 
 `-K` will force you to provide your password (`sudo`) to run some tasks
-
