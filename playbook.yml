@@ -8,6 +8,7 @@
     gohugo_version: 0.95.0
     glow_version: 1.4.1
     terraform_docs_version: 0.16.0
+    tfsec_version: 1.13.1
   tasks:
     - name: Upgrade system
       become: true
@@ -201,9 +202,15 @@
     - name: "move terraform-docs {{ terraform_docs_version }} to final destination"
       copy:
         src: /tmp/terraform-docs
-        dest: /home/fabian/.local/bin
+        dest: "/home/{{ ansible_user_id }}/.local/bin"
         remote_src: true
         mode: "755"
 
     - name: Remove terraform-docs leftovers
       shell: rm -f /tmp/terraform-docs*
+
+    - name: "Download tfsec {{ tfsec_version }}"
+      get_url:
+        url: "https://github.com/aquasecurity/tfsec/releases/download/v{{ tfsec_version }}/tfsec-linux-amd64"
+        dest: "/home/{{ ansible_user_id }}/.local/bin/tfsec"
+        mode: "755"

@@ -24,7 +24,8 @@ This Ansible playbook is used to initially setup Ubuntu running as wsl.
   - golang-1.18
   - nodejs (v17)
   - terraform
-  - terraform-docs
+  - [terraform-docs](https://github.com/terraform-docs/terraform-docs)
+  - [tfsec](https://github.com/aquasecurity/tfsec)
   - packer
   - starship
   - [gohugo](https://gohugo.io)
