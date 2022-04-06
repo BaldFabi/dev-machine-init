@@ -5,10 +5,10 @@
   vars:
     node_version: 17
     go_version: 1.18
-    gohugo_version: 0.95.0
+    gohugo_version: 0.96.0
     glow_version: 1.4.1
     terraform_docs_version: 0.16.0
-    tfsec_version: 1.13.1
+    tfsec_version: 1.15.4
   tasks:
     - name: Upgrade system
       become: true
@@ -28,6 +28,7 @@
           - apt-transport-https
           - gnupg
           - jq
+          - python3-pip
 
     - name: Install or update starship
       become: true
@@ -214,3 +215,10 @@
         url: "https://github.com/aquasecurity/tfsec/releases/download/v{{ tfsec_version }}/tfsec-linux-amd64"
         dest: "/home/{{ ansible_user_id }}/.local/bin/tfsec"
         mode: "755"
+
+    - name: Install mkdocs and mkdocs-material
+      pip:
+        name: "{{ item }}"
+      loop:
+        - mkdocs
+        - mkdocs-material
