@@ -4,7 +4,7 @@ This Ansible playbook is used to initially setup Ubuntu running as wsl.
 
 ## What will be configured
 
-> If you want to know what happens in detail please look into the [playbook.yml](playbook.yml) file
+> If you want to know what happens in detail or which versions are installed, please look into the [playbook.yml](playbook.yml) file
 
 - Installing some standard packages
   - zsh
@@ -21,8 +21,8 @@ This Ansible playbook is used to initially setup Ubuntu running as wsl.
   - [k9s](https://github.com/derailed/k9s)
   - [havener](https://github.com/homeport/havener)
   - azure-cli
-  - golang-1.18
-  - nodejs (v17)
+  - golang
+  - nodejs
   - terraform
   - [terraform-docs](https://github.com/terraform-docs/terraform-docs)
   - [tfsec](https://github.com/aquasecurity/tfsec)

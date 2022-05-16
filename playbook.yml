@@ -3,12 +3,12 @@
   hosts: localhost
   connection: local
   vars:
-    node_version: 17
+    node_version: 18
     go_version: 1.18
-    gohugo_version: 0.96.0
+    gohugo_version: 0.98.0
     glow_version: 1.4.1
     terraform_docs_version: 0.16.0
-    tfsec_version: 1.15.4
+    tfsec_version: 1.21.0
   tasks:
     - name: Upgrade system
       become: true
@@ -219,6 +219,7 @@
     - name: Install mkdocs and mkdocs-material
       pip:
         name: "{{ item }}"
+        state: latest
       loop:
         - mkdocs
         - mkdocs-material
