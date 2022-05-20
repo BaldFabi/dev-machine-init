@@ -9,11 +9,12 @@
     glow_version: 1.4.1
     terraform_docs_version: 0.16.0
     tfsec_version: 1.21.0
+    migrate_version: 4.15.2
   tasks:
     - name: Upgrade system
       become: true
       apt:
-        update_cache: yes
+        update_cache: true
         upgrade: dist
 
     - name: Install necessary packages
@@ -168,7 +169,7 @@
     - name: Install helm, kubectl, azure-cli, golang, nodejs, terraform, packer
       become: true
       apt:
-        update_cache: yes
+        update_cache: true
         pkg:
           - helm
           - kubectl
@@ -215,6 +216,21 @@
         url: "https://github.com/aquasecurity/tfsec/releases/download/v{{ tfsec_version }}/tfsec-linux-amd64"
         dest: "/home/{{ ansible_user_id }}/.local/bin/tfsec"
         mode: "755"
+
+    - name: "Download migrate {{ migrate_version }}"
+      get_url:
+        url: "https://github.com/golang-migrate/migrate/releases/download/v{{ migrate_version }}/migrate.linux-amd64.deb"
+        dest: /tmp
+
+    - name: "Install migrate {{ migrate_version }}"
+      become: true
+      apt:
+        deb: /tmp/migrate.linux-amd64.deb
+
+    - name: Remove migrate install package
+      file:
+        path: /tmp/migrate.linux-amd64.deb
+        state: absent
 
     - name: Install mkdocs and mkdocs-material
       pip:
