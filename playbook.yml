@@ -4,11 +4,11 @@
   connection: local
   vars:
     node_version: 18
-    go_version: 1.18
-    gohugo_version: 0.98.0
+    go_version: 1.19
+    gohugo_version: 0.101.0
     glow_version: 1.4.1
     terraform_docs_version: 0.16.0
-    tfsec_version: 1.21.0
+    tfsec_version: 1.27.1
     migrate_version: 4.15.2
   tasks:
     - name: Upgrade system
